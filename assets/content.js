@@ -18,8 +18,8 @@ window.SITE = {
     smallLine: "Multi-niche expertise, strongest in WordPress, Shopify & Design",
     tagline: "Turning pitches into projects and opportunities into revenue.",
     availability: "Available for new opportunities",
-    photo: "",            // e.g. "assets/img/shehzad.jpg" — leave "" to show the placeholder
-    aboutPhoto: "",       // e.g. "assets/img/shehzad-casual.jpg"
+    photo: "assets/img/shehzad-hero.jpg",        // leave "" to show the placeholder
+    aboutPhoto: "assets/img/shehzad-about.jpg",
     cv: "",               // e.g. "assets/Shehzad-Ali-CV.pdf" — the Download CV button stays hidden until this is set
     email: "shehzadali1220@gmail.com",
     phone: "+92 313 1063610",

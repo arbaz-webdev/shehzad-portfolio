@@ -55,7 +55,9 @@
 
   var setPhoto = function (fig, src, alt) {
     if (!src || !fig) return;
-    fig.innerHTML = '<img src="' + esc(src) + '" alt="' + esc(alt) + '" loading="' + (fig.id === "heroPhoto" ? "eager" : "lazy") + '">';
+    var hero = fig.id === "heroPhoto";
+    fig.innerHTML = '<img src="' + esc(src) + '" alt="' + esc(alt) + '" ' + (hero ? 'fetchpriority="high"' : 'loading="lazy"') + ">";
+    fig.classList.add("has-photo");
   };
   setPhoto($("#heroPhoto"), P.photo, P.name);
   setPhoto($("#aboutPhoto"), P.aboutPhoto || P.photo, P.name);

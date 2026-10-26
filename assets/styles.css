@@ -187,6 +187,15 @@ svg { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1
 .portrait-ph svg { width: 86%; height: auto; fill: var(--ph-fg); stroke: none; }
 .portrait-ph span { position: absolute; top: 46%; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); background: var(--bg); padding: 5px 12px; border-radius: 999px; border: 1px dashed var(--line-2); }
 .hero__photo .portrait-ph { background: radial-gradient(70% 60% at 50% 40%, var(--ph), transparent 72%); }
+/* Real photo: arch-topped card, black & white that warms to colour on hover. */
+.hero__photo.has-photo {
+  -webkit-mask-image: none; mask-image: none;
+  margin: 44px 0; overflow: hidden; border-radius: 170px 170px 30px 30px;
+  background: var(--ph); border: 1px solid var(--line-2);
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--card) 72%, transparent), 0 40px 80px -34px rgba(0,0,0,.75), 0 0 90px -10px var(--glow-strong);
+}
+.hero__photo.has-photo img, .about__photo img { transition: filter .7s, transform .9s var(--ease); }
+.hero__photo.has-photo:hover img, .about__photo:hover img { filter: none; transform: scale(1.03); }
 
 /* marquee */
 .marquee { position: relative; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 22px 0; overflow: hidden;
@@ -549,6 +558,7 @@ svg { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1
 @media (max-width: 900px) {
   .hero__stage { grid-template-columns: 1fr; justify-items: center; margin-top: 8px; }
   .hero__photo { order: 1; width: min(320px, 80%); }
+  .hero__photo.has-photo { margin: 20px 0 36px; }
   .hero__right { order: 2; align-items: center; text-align: center; padding: 0; }
   .hero__left { order: 3; align-items: center; padding: 0 0 40px; flex-direction: column-reverse; gap: 24px; }
   .hero__signature { max-width: 26ch; }
