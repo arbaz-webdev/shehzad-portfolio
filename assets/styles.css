@@ -488,7 +488,7 @@ svg { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1
 /* Panel slides in from whichever side the tab is on. */
 .credit__panel {
   --ty: -50%;
-  position: fixed; left: 16px; top: 50%; z-index: 56; width: min(350px, calc(100vw - 32px));
+  position: fixed; left: 16px; top: 50%; z-index: 70; width: min(350px, calc(100vw - 32px));
   padding: 26px 24px 22px; border-radius: 26px; overflow: hidden;
   background: var(--card); border: 1px solid var(--line-2);
   box-shadow: 0 40px 80px -30px rgba(0,0,0,.7), 0 0 0 1px rgba(168,240,79,.06);
