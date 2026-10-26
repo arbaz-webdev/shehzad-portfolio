@@ -170,7 +170,8 @@
   var T = S.testimonials || [];
   $("#testimonialsGrid").innerHTML = T.length
     ? T.map(function (t, i) {
-        var av = t.photo ? '<img src="' + esc(t.photo) + '" alt="" loading="lazy">' : '<span class="quote__av"></span>';
+        var initials = String(t.name || "").split(/\s+/).map(function (w) { return w.charAt(0); }).join("").slice(0, 2).toUpperCase();
+        var av = t.photo ? '<img src="' + esc(t.photo) + '" alt="" loading="lazy">' : '<b class="quote__av" aria-hidden="true">' + esc(initials) + "</b>";
         var tag = t.sample ? '<span class="quote__sample">Sample</span>' : "";
         return '<figure class="quote reveal" style="--d:' + (i % 3) * 0.08 + 's">' + tag + '<span class="quote__mark" aria-hidden="true">“</span><p>' + esc(t.quote) +
           '</p><figcaption class="quote__who">' + av + "<div><strong>" + esc(t.name) + "</strong><span>" + esc(t.role) + "</span></div></figcaption></figure>";
