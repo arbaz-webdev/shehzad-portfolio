@@ -284,14 +284,96 @@
     sections.forEach(function (s) { navIO.observe(s); });
   }
 
-  /* ---------- developer credit tab ---------- */
-  var credit = $("#credit"), creditTab = $("#creditTab"), creditClose = $("#creditClose");
+  /* ---------- developer credit tab (draggable, snaps to left/right edge) ---------- */
+  var credit = $("#credit"), creditTab = $("#creditTab"), creditClose = $("#creditClose"), creditPanel = $("#creditPanel");
+  var pos = { side: "left", frac: 0.5 };   // frac = tab centre as a share of viewport height
+  try {
+    var saved = JSON.parse(localStorage.getItem("creditPos"));
+    if (saved && (saved.side === "left" || saved.side === "right") && saved.frac >= 0 && saved.frac <= 1) pos = saved;
+  } catch (err) {}
+  var clamp = function (v, lo, hi) { return Math.max(lo, Math.min(hi, v)); };
+  var vw = function () { return document.documentElement.clientWidth; };
+  var tabY = function () {
+    var h = creditTab.offsetHeight, vh = window.innerHeight;
+    var bottomGap = pos.side === "right" ? 90 : 16;   // keep clear of the WhatsApp button
+    return clamp(pos.frac * vh - h / 2, 16, Math.max(16, vh - h - bottomGap));
+  };
+  var placeCredit = function () {
+    var w = creditTab.offsetWidth, open = credit.classList.contains("open");
+    var x = pos.side === "left" ? (open ? -w - 12 : 0) : (open ? vw() + 12 : vw() - w);
+    var y = tabY();
+    credit.dataset.side = pos.side;
+    creditTab.style.transform = "translate(" + x + "px," + y + "px)";
+    var ph = creditPanel.offsetHeight, vh = window.innerHeight;
+    creditPanel.style.top = clamp(y + creditTab.offsetHeight / 2 - ph / 2, 16, Math.max(16, vh - ph - 16)) + "px";
+  };
+  creditTab.style.transition = "none";      // first placement shouldn't animate
+  credit.classList.add("credit--js");
+  placeCredit();
+  void creditTab.offsetWidth;
+  creditTab.style.transition = "";
+  window.addEventListener("resize", placeCredit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeCredit);
+  var savePos = function () { try { localStorage.setItem("creditPos", JSON.stringify(pos)); } catch (err) {} };
+
   var setCredit = function (open, focus) {
     credit.classList.toggle("open", open);
     creditTab.setAttribute("aria-expanded", String(open));
+    placeCredit();
     if (focus) (open ? creditClose : creditTab).focus({ preventScroll: true });
   };
-  creditTab.addEventListener("click", function () { setCredit(true, true); });
+
+  // Drag: a short press is a click (opens the panel); moving > 6px drags the tab.
+  var drag = null, justDragged = false;
+  creditTab.addEventListener("pointerdown", function (e) {
+    if (e.button !== 0) return;
+    var m = /translate\(([-\d.]+)px,\s*([-\d.]+)px\)/.exec(creditTab.style.transform) || [0, 0, 0];
+    drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, x0: +m[1], y0: +m[2], moved: false };
+    creditTab.setPointerCapture(e.pointerId);
+  });
+  creditTab.addEventListener("pointermove", function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+    if (!drag.moved && Math.hypot(dx, dy) < 6) return;
+    if (!drag.moved) { drag.moved = true; creditTab.classList.add("dragging"); }
+    var w = creditTab.offsetWidth, h = creditTab.offsetHeight;
+    var x = clamp(drag.x0 + dx, 0, vw() - w), y = clamp(drag.y0 + dy, 8, window.innerHeight - h - 8);
+    creditTab.style.transform = "translate(" + x + "px," + y + "px)";
+    drag.x = x; drag.y = y;
+  });
+  var endDrag = function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    if (drag.moved) {
+      var w = creditTab.offsetWidth, h = creditTab.offsetHeight;
+      pos.side = drag.x + w / 2 < vw() / 2 ? "left" : "right";
+      pos.frac = clamp((drag.y + h / 2) / window.innerHeight, 0, 1);
+      creditTab.classList.remove("dragging");
+      placeCredit();
+      savePos();
+      justDragged = true;
+      setTimeout(function () { justDragged = false; }, 0);
+    }
+    drag = null;
+  };
+  creditTab.addEventListener("pointerup", endDrag);
+  creditTab.addEventListener("pointercancel", endDrag);
+
+  // Keyboard: arrows move the tab; Enter/Space open it (native button click).
+  creditTab.addEventListener("keydown", function (e) {
+    var moves = { ArrowUp: [0, -0.06], ArrowDown: [0, 0.06], ArrowLeft: ["left"], ArrowRight: ["right"] };
+    var mv = moves[e.key];
+    if (!mv) return;
+    e.preventDefault();
+    if (typeof mv[0] === "string") pos.side = mv[0];
+    else pos.frac = clamp(pos.frac + mv[1], 0, 1);
+    placeCredit();
+    savePos();
+  });
+
+  creditTab.addEventListener("click", function () {
+    if (justDragged) return;
+    setCredit(true, true);
+  });
   creditClose.addEventListener("click", function () { setCredit(false, true); });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && credit.classList.contains("open")) setCredit(false, true);

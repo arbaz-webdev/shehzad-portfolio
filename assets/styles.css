@@ -459,29 +459,45 @@ svg { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1
 .footer__credit { color: var(--text); font-weight: 600; border-bottom: 1px solid var(--accent); }
 .footer__credit:hover { color: var(--accent-text); }
 
+/* Tab: left edge by default; main.js positions it with transform once it can be dragged. */
 .credit__tab {
-  position: fixed; right: 0; top: 50%; z-index: 55; transform: translateY(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 12px 9px 16px;
-  border: 1px solid var(--line-2); border-right: 0; border-radius: 16px 0 0 16px; cursor: pointer;
+  position: fixed; left: 0; top: 50%; z-index: 55; transform: translateY(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 12px 9px 12px;
+  border: 1px solid var(--line-2); border-left-width: 0; border-radius: 0 16px 16px 0;
+  cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
   background: color-mix(in srgb, var(--card) 88%, transparent); backdrop-filter: blur(12px);
-  box-shadow: -10px 14px 30px -18px rgba(0,0,0,.6);
-  transition: transform .45s var(--ease), padding .3s var(--ease), border-color .3s;
+  box-shadow: 10px 14px 30px -18px rgba(0,0,0,.6);
+  transition: transform .55s var(--ease), border-radius .3s, border-color .3s, box-shadow .3s;
 }
-.credit__tab:hover { padding-right: 15px; border-color: var(--accent); }
-.credit__tab-icon { width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; font-size: 15px; background: var(--accent); color: var(--on-accent); box-shadow: 0 0 0 4px var(--glow); }
+.credit[data-side="right"] .credit__tab { border-left-width: 1px; border-right-width: 0; border-radius: 16px 0 0 16px; box-shadow: -10px 14px 30px -18px rgba(0,0,0,.6); }
+.credit--js .credit__tab { top: 0; left: 0; }
+.credit__tab:hover { border-color: var(--accent); }
+.credit__tab:hover .credit__tab-icon { transform: rotate(-8deg) scale(1.06); }
+.credit__tab.dragging, .credit[data-side] .credit__tab.dragging {
+  cursor: grabbing; transition: border-radius .2s, box-shadow .2s;
+  border-width: 1px; border-color: var(--accent); border-radius: 16px;
+  box-shadow: 0 26px 50px -18px rgba(0,0,0,.75), 0 0 0 6px var(--glow);
+}
+.credit__tab-icon { width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; font-size: 15px; background: var(--accent); color: var(--on-accent); box-shadow: 0 0 0 4px var(--glow); transition: transform .3s var(--ease); }
 .credit__tab-icon svg { stroke-width: 2.2; }
 .credit__tab-text { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 13px; font-weight: 700; letter-spacing: .05em; white-space: nowrap; }
-.credit.open .credit__tab { transform: translate(110%, -50%); }
+.credit__grip { display: grid; grid-template-columns: repeat(2, 3px); gap: 3px; opacity: .45; transition: opacity .2s; }
+.credit__grip i { width: 3px; height: 3px; border-radius: 50%; background: currentColor; }
+.credit__tab:hover .credit__grip, .credit__tab.dragging .credit__grip { opacity: 1; }
 
+/* Panel slides in from whichever side the tab is on. */
 .credit__panel {
-  position: fixed; right: 16px; top: 50%; z-index: 56; width: min(350px, calc(100vw - 32px));
+  --ty: -50%;
+  position: fixed; left: 16px; top: 50%; z-index: 56; width: min(350px, calc(100vw - 32px));
   padding: 26px 24px 22px; border-radius: 26px; overflow: hidden;
   background: var(--card); border: 1px solid var(--line-2);
   box-shadow: 0 40px 80px -30px rgba(0,0,0,.7), 0 0 0 1px rgba(168,240,79,.06);
-  transform: translate(calc(100% + 32px), -50%); opacity: 0; visibility: hidden;
+  transform: translate(calc(-100% - 32px), var(--ty)); opacity: 0; visibility: hidden;
   transition: transform .55s var(--ease), opacity .35s, visibility 0s .55s;
 }
-.credit.open .credit__panel { transform: translate(0, -50%); opacity: 1; visibility: visible; transition: transform .55s var(--ease), opacity .35s, visibility 0s; }
+.credit[data-side="right"] .credit__panel { left: auto; right: 16px; transform: translate(calc(100% + 32px), var(--ty)); }
+.credit--js .credit__panel { --ty: 0px; }
+.credit.open .credit__panel { transform: translate(0, var(--ty)); opacity: 1; visibility: visible; transition: transform .55s var(--ease), opacity .35s, visibility 0s; }
 .credit__panel::before { content: ""; position: absolute; inset: -40% -30% auto auto; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(closest-side, var(--glow-strong), transparent); pointer-events: none; }
 .credit__panel > * { position: relative; }
 .credit__close { position: absolute; top: 14px; right: 14px; width: 34px; height: 34px; font-size: 15px; background: var(--card); }
@@ -504,7 +520,7 @@ svg { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1
 .credit__foot .dot { width: 8px; height: 8px; }
 
 @media (max-width: 640px) {
-  .credit__tab { padding: 10px 7px 13px; gap: 8px; }
+  .credit__tab { padding: 10px 7px 10px; gap: 8px; }
   .credit__tab-icon { width: 24px; height: 24px; font-size: 13px; }
   .credit__tab-text { font-size: 12px; }
 }
