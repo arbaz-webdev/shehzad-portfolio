@@ -284,6 +284,22 @@
     sections.forEach(function (s) { navIO.observe(s); });
   }
 
+  /* ---------- developer credit tab ---------- */
+  var credit = $("#credit"), creditTab = $("#creditTab"), creditClose = $("#creditClose");
+  var setCredit = function (open, focus) {
+    credit.classList.toggle("open", open);
+    creditTab.setAttribute("aria-expanded", String(open));
+    if (focus) (open ? creditClose : creditTab).focus({ preventScroll: true });
+  };
+  creditTab.addEventListener("click", function () { setCredit(true, true); });
+  creditClose.addEventListener("click", function () { setCredit(false, true); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && credit.classList.contains("open")) setCredit(false, true);
+  });
+  document.addEventListener("click", function (e) {
+    if (credit.classList.contains("open") && !credit.contains(e.target)) setCredit(false, false);
+  });
+
   /* ---------- counters ---------- */
   var count = function (el) {
     var to = +el.getAttribute("data-to"), t0 = null, dur = 1600;
