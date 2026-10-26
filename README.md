@@ -33,7 +33,7 @@ Open `assets/content.js` in any text editor (or your host's File Manager), chang
    - Replace `https://arbaz-webdev.github.io/shehzad-portfolio/` with `https://shehzadbizdev.com/` in `index.html`, `robots.txt` and `sitemap.xml`.
    - Change `/shehzad-portfolio/` back to `/` in `404.html`.
    - In the repo, go to Settings → Pages → Custom domain and add the domain, then tick "Enforce HTTPS".
-4. **Updating the live site.** Push to `main` and GitHub Pages redeploys in about a minute. You can also edit `assets/content.js` right on github.com (pencil icon → Commit changes).
+4. **Updating the live site.** Push to `main` and GitHub Pages redeploys in about a minute. You can also edit `assets/content.js` right on github.com (pencil icon → Commit changes). Browsers cache files for up to 10 minutes. After changing CSS or JS, bump the `?v=` number on those links in `index.html` (for example `?v=3` → `?v=4`) so visitors get the new files straight away.
 
 ## Preview tricks
 
