@@ -238,7 +238,32 @@ window.SITE = {
   ],
 
   /* ---------- Testimonials ----------
-     Leave empty [] to show the "coming soon" placeholders. Example:
+     Leave empty [] to show the "coming soon" placeholders.
+     The three below are SAMPLES for testing the layout — replace them with
+     real reviews. Delete the `sample: true` line to remove the "Sample" tag.
+     Real example:
      { quote: "Shehzad took our profile to Top Rated...", name: "Client Name", role: "Founder, Company", photo: "" } */
-  testimonials: []
+  testimonials: [
+    {
+      quote: "Shehzad rebuilt our Upwork profile from the ground up: new positioning, sharper keywords and proposals that actually fit our niche. Within a few weeks we were getting invites instead of chasing every job.",
+      name: "Sample client",
+      role: "Agency founder · Shopify development",
+      photo: "",
+      sample: true
+    },
+    {
+      quote: "What sets him apart is that he doesn't disappear after the contract is signed. He briefed our team, kept the client updated and made sure every deliverable went out on time.",
+      name: "Sample client",
+      role: "Project lead · Web development agency",
+      photo: "",
+      sample: true
+    },
+    {
+      quote: "His proposals read like they were written for that one client, because they were. Our reply rate went up noticeably and we closed our first long-term account soon after.",
+      name: "Sample client",
+      role: "Freelance graphic designer",
+      photo: "",
+      sample: true
+    }
+  ]
 };

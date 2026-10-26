@@ -397,12 +397,13 @@ svg { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1
 
 /* ---------- testimonials ---------- */
 .testimonials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.quote { padding: 28px; border-radius: var(--r); background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 22px; }
+.quote { position: relative; margin: 0; padding: 28px; border-radius: var(--r); background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 22px; }
 .quote__mark { font-family: var(--serif); font-size: 64px; line-height: .6; height: 26px; color: var(--accent-text); }
 .quote p { color: var(--soft); flex: 1; }
 .quote__who { display: flex; align-items: center; gap: 12px; font-size: 14px; }
 .quote__who img, .quote__av { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--card-2); border: 1px solid var(--line); }
 .quote__who span { color: var(--muted); display: block; font-size: 13px; }
+.quote__sample { position: absolute; top: 20px; right: 20px; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border: 1px dashed var(--line-2); }
 .quote--ph { border-style: dashed; border-color: var(--line-2); background: transparent; box-shadow: none; }
 .sk { display: block; height: 10px; border-radius: 6px; background: var(--card-2); }
 .sk + .sk { margin-top: 10px; }
